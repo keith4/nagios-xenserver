@@ -52,10 +52,10 @@ def humanize_bytes(bytes, precision=2, suffix=True, format="pnp4nagios"):
 
     if format == "pnp4nagios":
         abbrevs = (
-            (1<<30L, 'Gb'),
-            (1<<20L, 'Mb'),
-            (1<<10L, 'kb'),
-            (1,      'b')
+            (1<<30L, 'GB'),
+            (1<<20L, 'MB'),
+            (1<<10L, 'KB'),
+            (1,      'B')
         )
     else:
         abbrevs = (
@@ -63,8 +63,8 @@ def humanize_bytes(bytes, precision=2, suffix=True, format="pnp4nagios"):
             (1<<40L, 'T'),
             (1<<30L, 'G'),
             (1<<20L, 'M'),
-            (1<<10L, 'k'),
-            (1,      'b')
+            (1<<10L, 'K'),
+            (1,      'B')
         )
 
     if bytes == 1:
@@ -81,13 +81,13 @@ def humanize_bytes(bytes, precision=2, suffix=True, format="pnp4nagios"):
 def performancedata(sr_name, suffix, total, alloc, warning, critical, performancedata_format="pnp4nagios"):
 
     if performancedata_format == "pnp4nagios":
-        performance_line = "'"+sr_name + suffix + "'=" + \
+        performance_line = sr_name + suffix + "=" + \
             str(humanize_bytes(alloc,    precision=1, suffix=True, format=performancedata_format)) + ";" + \
             str(humanize_bytes(warning,  precision=1, suffix=True, format=performancedata_format)) + ";" + \
             str(humanize_bytes(critical, precision=1, suffix=True, format=performancedata_format)) + ";0.00;" + \
             str(humanize_bytes(total,    precision=1, suffix=True, format=performancedata_format)) +""
     else:
-        performance_line = "'"+sr_name + suffix + "'=" + \
+        performance_line = sr_name + suffix + "=" + \
             str(alloc) + "B;" + \
             str(warning) + ";" + \
             str(critical) + ";0;" + \
@@ -278,16 +278,17 @@ def check_mem(session, args):
 
 
     if finalexit == 2:
-        prefix = "CRITICAL: Memory Usage "
-        prefix += " / Critical on Hosts = ["+", ".join(critical_hosts)+"]"
-        prefix += " / Warning on Hosts = ["+", ".join(warning_hosts)+"]"
+        prefix = "CRITICAL - Memory Usage:"
+        prefix += " Critical on ["+", ".join(critical_hosts)+"]; "
+        prefix += " Warning on ["+", ".join(warning_hosts)+"]; "
     elif finalexit == 1:
-        prefix = "WARNING: Memory Usage"
-        prefix += " / Warning on Hosts = ["+", ".join(warning_hosts)+"]"
+        prefix = "WARNING - Memory Usage:"
+        prefix += " Warning on ["+", ".join(warning_hosts)+"]; "
     else:
-        prefix = "OK: Memory Usage"
+        prefix = "OK - Memory Usage: "
 
-    print prefix + " | " + performance + "\n" + ";\n".join([output[hostname]['service'] for hostname in output]) +	"; | " + " ".join([output[hostname]['perf'] for hostname in output])
+#    print prefix + " | " + performance + "\n" + ";\n".join([output[hostname]['service'] for hostname in output]) + "; | " + " ".join([output[hostname]['perf'] for hostname in output])
+    print prefix + "; ".join([output[hostname]['service'] for hostname in output]) + " | " + performance + " " + " ".join([output[hostname]['perf'] for hostname in output])
 
     sys.exit(finalexit)
 
@@ -354,13 +355,13 @@ def check_cpu(session, args):
         globalperf += perfdata[perf]
         if perfdata[perf] > float(critical)/100:
             exitcode = 2
-            prefix = "CRITICAL: CPU, "
+            prefix = "CRITICAL - CPU: "
         elif perfdata[perf] > float(warning)/100:
             exitcode = 1
-            prefix = "WARNING: CPU, "
+            prefix = "WARNING - CPU: "
         else:
             exitcode = 0
-            prefix = "OK: CPU, "
+            prefix = "OK - CPU: "
 
     globalperf = globalperf / len(perfdata)
 #    print prefix + "| used_cpu="+str(round(globalperf, 2)*100)+"%;" + str(warning)+"%;" + str(critical)+"%\n"+\
