@@ -82,16 +82,16 @@ def performancedata(sr_name, suffix, total, alloc, warning, critical, performanc
 
     if performancedata_format == "pnp4nagios":
         performance_line = "'"+sr_name + suffix + "'=" + \
-            str(humanize_bytes(alloc,    precision=1, suffix=True, format=performancedata_format)).replace(".",",") + ";" + \
-            str(humanize_bytes(warning,  precision=1, suffix=True, format=performancedata_format)).replace(".",",") + ";" + \
-            str(humanize_bytes(critical, precision=1, suffix=True, format=performancedata_format)).replace(".",",") + ";0.00;" + \
-            str(humanize_bytes(total,    precision=1, suffix=True, format=performancedata_format)).replace(".",",") +""
+            str(humanize_bytes(alloc,    precision=1, suffix=True, format=performancedata_format)) + ";" + \
+            str(humanize_bytes(warning,  precision=1, suffix=True, format=performancedata_format)) + ";" + \
+            str(humanize_bytes(critical, precision=1, suffix=True, format=performancedata_format)) + ";0.00;" + \
+            str(humanize_bytes(total,    precision=1, suffix=True, format=performancedata_format)) +""
     else:
         performance_line = "'"+sr_name + suffix + "'=" + \
-            str(alloc).replace(".",",") + "B;" + \
-            str(warning).replace(".",",")+ ";" + \
-            str(critical).replace(".",",") + ";0;" + \
-            str(total).replace(".",",") +""
+            str(alloc) + "B;" + \
+            str(warning) + ";" + \
+            str(critical) + ";0;" + \
+            str(total) +""
 
     return(performance_line)
 
