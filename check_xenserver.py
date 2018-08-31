@@ -354,18 +354,21 @@ def check_cpu(session, args):
         globalperf += perfdata[perf]
         if perfdata[perf] > float(critical)/100:
             exitcode = 2
-            prefix = "CRITICAL: CPU "
+            prefix = "CRITICAL: CPU, "
         elif perfdata[perf] > float(warning)/100:
             exitcode = 1
-            prefix = "WARNING: CPU "
+            prefix = "WARNING: CPU, "
         else:
             exitcode = 0
-            prefix = "OK: CPU "
+            prefix = "OK: CPU, "
 
     globalperf = globalperf / len(perfdata)
-    print prefix + "| 'used_cpu'="+str(round(globalperf, 2)*100)+"%;" + str(warning)+"%;" + str(critical)+"%;0%;100%;\n"+\
-    ";\n".join([host+" Used CPU = "+str(round(perfdata[host],2)*100) for host in perfdata]) + "%; |" +\
-    " ".join(["'"+host+"_used_cpu'="+str(round(perfdata[host],2)*100)+"%;"+str(warning)+"%;" + str(critical)+"%;0%;100%" for host in perfdata])
+#    print prefix + "| used_cpu="+str(round(globalperf, 2)*100)+"%;" + str(warning)+"%;" + str(critical)+"%\n"+\
+#    "\n".join([host+" Used CPU = "+str(round(perfdata[host],2)*100)+"%" for host in perfdata]) + " | " +\
+#    "\n".join([host+"_used_cpu="+str(round(perfdata[host],2)*100)+"%;"+str(warning)+"%;" + str(critical)+"%" for host in perfdata])
+    print prefix + ", ".join([host+" CPU = "+str(round(perfdata[host],2)*100)+"%" for host in perfdata]) + " | " + \
+    "average_used_cpu=" + str(round(globalperf, 2)*100) + "%;" + str(warning) + "%;" + str(critical) + "% " + \
+    " ".join([host+"_used_cpu="+str(round(perfdata[host],2)*100)+"%;"+str(warning)+"%;" + str(critical)+"%" for host in perfdata])
 
     sys.exit(exitcode)
 
