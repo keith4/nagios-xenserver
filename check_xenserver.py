@@ -81,21 +81,13 @@ def humanize_bytes(bytes, precision=2, suffix=True, format="pnp4nagios"):
 def performancedata(sr_name, suffix, total, alloc, warning, critical, performancedata_format="pnp4nagios"):
 
     if performancedata_format == "pnp4nagios":
-<<<<<<< HEAD
         performance_line = sr_name + suffix + "=" + \
-=======
-        performance_line = "'"+sr_name + suffix + "'=" + \
->>>>>>> c3367b6b052e715e4cfb2ff5c0a7efeaf9631dda
             str(humanize_bytes(alloc,    precision=1, suffix=True, format=performancedata_format)) + ";" + \
             str(humanize_bytes(warning,  precision=1, suffix=True, format=performancedata_format)) + ";" + \
             str(humanize_bytes(critical, precision=1, suffix=True, format=performancedata_format)) + ";0.00;" + \
             str(humanize_bytes(total,    precision=1, suffix=True, format=performancedata_format)) +""
     else:
-<<<<<<< HEAD
         performance_line = sr_name + suffix + "=" + \
-=======
-        performance_line = "'"+sr_name + suffix + "'=" + \
->>>>>>> c3367b6b052e715e4cfb2ff5c0a7efeaf9631dda
             str(alloc) + "B;" + \
             str(warning) + ";" + \
             str(critical) + ";0;" + \
