@@ -112,7 +112,7 @@ def compute(name, size, util, free, warning, critical, performancedata_format, f
         critical_b,
         performancedata_format)
 
-    info['service'] =  "%s %s%%, size %s, used %s, free %s" % (name,
+    info['service'] =  "%s=%s%% size=%s used=%s free=%s" % (name,
                                     str(round(used_percent,2)),
                                     str(humanize_bytes(total_bytes_b, precision=0)),
                                     str(humanize_bytes(total_alloc_b, precision=0)),
@@ -195,18 +195,16 @@ def check_sr(session, args):
 
 
     if finalexit == 2:
-        prefix = "CRITICAL: SR Space"
-        prefix += " / Critical SRs = ["+", ".join(critical_srs)+"]"
-        prefix += " / Warning SRs = ["+", ".join(warning_srs)+"]"
+        prefix = "CRITICAL - SR Space: "
+        prefix += "Critical on ["+", ".join(critical_srs)+"], "
+        prefix += "Warning on ["+", ".join(warning_srs)+"], "
     elif finalexit == 1:
-        prefix = "WARNING: SR Space"
-        prefix += " / Warning SRs = ["+", ".join(warning_srs)+"]"
+        prefix = "WARNING - SR Space: "
+        prefix += "Warning on ["+", ".join(warning_srs)+"], "
     else:
-        prefix = "OK: SR Space"
+        prefix = "OK - SR Space: "
 
-
-    print prefix + ' | ' + performance + "\n" + ";\n".join([output[disk_srs]['service'] for disk_srs in output]) +	"; | " + " ".join([output[disk_srs]['perf'] for disk_srs in output])
-
+    print prefix + ", ".join([output[disk_srs]['service'] for disk_srs in output]) +  ' | ' + performance + " " + " ".join([output[disk_srs]['perf'] for disk_srs in output])
     sys.exit(finalexit)
 
 def mem(session, host, warning, critical, performancedata_format):
@@ -279,16 +277,16 @@ def check_mem(session, args):
 
     if finalexit == 2:
         prefix = "CRITICAL - Memory Usage:"
-        prefix += " Critical on ["+", ".join(critical_hosts)+"]; "
-        prefix += " Warning on ["+", ".join(warning_hosts)+"]; "
+        prefix += " Critical on ["+", ".join(critical_hosts)+"], "
+        prefix += " Warning on ["+", ".join(warning_hosts)+"], "
     elif finalexit == 1:
         prefix = "WARNING - Memory Usage:"
-        prefix += " Warning on ["+", ".join(warning_hosts)+"]; "
+        prefix += " Warning on ["+", ".join(warning_hosts)+"], "
     else:
         prefix = "OK - Memory Usage: "
 
 #    print prefix + " | " + performance + "\n" + ";\n".join([output[hostname]['service'] for hostname in output]) + "; | " + " ".join([output[hostname]['perf'] for hostname in output])
-    print prefix + "; ".join([output[hostname]['service'] for hostname in output]) + " | " + performance + " " + " ".join([output[hostname]['perf'] for hostname in output])
+    print prefix + ", ".join([output[hostname]['service'] for hostname in output]) + " | " + performance + " " + " ".join([output[hostname]['perf'] for hostname in output])
 
     sys.exit(finalexit)
 
